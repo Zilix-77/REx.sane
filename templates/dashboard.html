@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load currency %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Your budget overview for <span class="font-semibold">{{ current_month|date:"F Y" }}</span>
+        </p>
+    </div>
+
+    <!-- Month Navigation -->
+    <div class="flex items-center gap-2">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}" class="btn btn-ghost p-2">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </a>
+        <span class="text-sm font-semibold text-slate-600 dark:text-slate-300 min-w-[100px] text-center">
+            {{ current_month|date:"M Y" }}
+        </span>
+        {% if not is_current_month %}
+        <a href="?year={{ next_year }}&month={{ next_month }}" class="btn btn-ghost p-2">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </a>
+        {% else %}
+        <span class="p-2 opacity-30"><i data-lucide="chevron-right" class="w-5 h-5"></i></span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Budget Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <!-- Total Income -->
+    <div class="card animate-fade-in-up">
+        <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Monthly Income</p>
+            <div class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-500/15 flex items-center justify-center">
+                <i data-lucide="wallet" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-slate-800 dark:text-white">{{ total_budget|inr }}</p>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
+            {{ total_spent|inr }} spent · {{ total_budget|add:"-"|default:"0"|inr }} left
+        </p>
+    </div>
+
+    <!-- Needs -->
+    <div class="card animate-fade-in-up animate-delay-1">
+        <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Needs</p>
+            <div class="w-8 h-8 rounded-lg bg-need-light dark:bg-red-500/15 flex items-center justify-center">
+                <i data-lucide="home" class="w-4 h-4 text-need dark:text-red-400"></i>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-slate-800 dark:text-white">{{ needs_spent|inr }}</p>
+        <div class="flex items-center justify-between text-xs mt-1 mb-2">
+            <span class="text-slate-400 dark:text-slate-500">of {{ needs_budget|inr }}</span>
+            <span class="font-semibold {% if needs_remaining < 0 %}text-red-500{% else %}text-emerald-500{% endif %}">
+                {% if needs_remaining >= 0 %}{{ needs_remaining|inr }} left{% else %}-{{ needs_remaining|floatformat:0 }} over{% endif %}
+            </span>
+        </div>
+        <div class="progress-bar-track">
+            {% widthratio needs_spent needs_budget 100 as needs_pct_used %}
+            <div class="progress-bar-fill bg-need" style="width: {% if needs_budget > 0 %}{{ needs_pct_used|default:'0' }}{% else %}0{% endif %}%"></div>
+        </div>
+    </div>
+
+    <!-- Wants -->
+    <div class="card animate-fade-in-up animate-delay-2">
+        <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Wants</p>
+            <div class="w-8 h-8 rounded-lg bg-want-light dark:bg-amber-500/15 flex items-center justify-center">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-want dark:text-amber-400"></i>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-slate-800 dark:text-white">{{ wants_spent|inr }}</p>
+        <div class="flex items-center justify-between text-xs mt-1 mb-2">
+            <span class="text-slate-400 dark:text-slate-500">of {{ wants_budget|inr }}</span>
+            <span class="font-semibold {% if wants_remaining < 0 %}text-red-500{% else %}text-emerald-500{% endif %}">
+                {% if wants_remaining >= 0 %}{{ wants_remaining|inr }} left{% else %}-{{ wants_remaining|floatformat:0 }} over{% endif %}
+            </span>
+        </div>
+        <div class="progress-bar-track">
+            {% widthratio wants_spent wants_budget 100 as wants_pct_used %}
+            <div class="progress-bar-fill bg-want" style="width: {% if wants_budget > 0 %}{{ wants_pct_used|default:'0' }}{% else %}0{% endif %}%"></div>
+        </div>
+    </div>
+
+    <!-- Savings -->
+    <div class="card animate-fade-in-up animate-delay-3">
+        <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Savings</p>
+            <div class="w-8 h-8 rounded-lg bg-saving-light dark:bg-emerald-500/15 flex items-center justify-center">
+                <i data-lucide="piggy-bank" class="w-4 h-4 text-saving dark:text-emerald-400"></i>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-slate-800 dark:text-white">{{ savings_spent|inr }}</p>
+        <div class="flex items-center justify-between text-xs mt-1 mb-2">
+            <span class="text-slate-400 dark:text-slate-500">of {{ savings_budget|inr }}</span>
+            <span class="font-semibold {% if savings_remaining < 0 %}text-red-500{% else %}text-emerald-500{% endif %}">
+                {% if savings_remaining >= 0 %}{{ savings_remaining|inr }} left{% else %}-{{ savings_remaining|floatformat:0 }} over{% endif %}
+            </span>
+        </div>
+        <div class="progress-bar-track">
+            {% widthratio savings_spent savings_budget 100 as savings_pct_used %}
+            <div class="progress-bar-fill bg-saving" style="width: {% if savings_budget > 0 %}{{ savings_pct_used|default:'0' }}{% else %}0{% endif %}%"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+    <!-- Doughnut Chart -->
+    <div class="card animate-fade-in-up animate-delay-2">
+        <h2 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-brand-500"></i>
+            Spending Breakdown
+        </h2>
+        <div class="relative" style="max-height: 260px;">
+            <canvas id="doughnut-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="card lg:col-span-2 animate-fade-in-up animate-delay-3">
+        <h2 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-4 h-4 text-brand-500"></i>
+            Daily Spending
+        </h2>
+        <div style="max-height: 260px;">
+            <canvas id="bar-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Expenses -->
+<div class="card animate-fade-in-up animate-delay-4">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-brand-500"></i>
+            Recent Expenses
+        </h2>
+        <a href="{% url 'core:expenses' %}" class="text-xs font-semibold text-brand-500 hover:text-brand-600 transition-colors">
+            View All →
+        </a>
+    </div>
+
+    {% if recent_expenses %}
+    <div class="space-y-3">
+        {% for exp in recent_expenses %}
+        <div class="flex items-center justify-between py-2 {% if not forloop.last %}border-b border-slate-100 dark:border-slate-700/50{% endif %}">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center
+                    {% if exp.category == 'NEED' %}bg-need-light dark:bg-red-500/10{% elif exp.category == 'WANT' %}bg-want-light dark:bg-amber-500/10{% else %}bg-saving-light dark:bg-emerald-500/10{% endif %}">
+                    {% if exp.category == 'NEED' %}
+                    <i data-lucide="home" class="w-4 h-4 text-need dark:text-red-400"></i>
+                    {% elif exp.category == 'WANT' %}
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-want dark:text-amber-400"></i>
+                    {% else %}
+                    <i data-lucide="piggy-bank" class="w-4 h-4 text-saving dark:text-emerald-400"></i>
+                    {% endif %}
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ exp.title }}</p>
+                    <p class="text-xs text-slate-400 dark:text-slate-500">{{ exp.date|date:"d M" }} · <span class="badge badge-{{ exp.category|lower }}">{{ exp.get_category_display }}</span></p>
+                </div>
+            </div>
+            <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ exp.amount|inr }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-8">
+        <i data-lucide="receipt" class="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3"></i>
+        <p class="text-sm text-slate-400 dark:text-slate-500">No expenses this month yet.</p>
+        <a href="{% url 'core:expenses' %}" class="text-sm font-semibold text-brand-500 hover:text-brand-600 mt-1 inline-block">
+            Add your first expense →
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/charts.js' %}"></script>
+<script>
+    initDashboardCharts(
+        {{ doughnut_data|safe }},
+        {{ doughnut_budget|safe }},
+        {{ bar_labels|safe }},
+        {{ bar_data|safe }}
+    );
+</script>
+{% endblock %}

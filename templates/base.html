@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="REx.sane — Simple budgeting for your family. Track needs, wants, and savings effortlessly.">
+    <title>{% block title %}REx.sane{% endblock %} — Budget Made Simple</title>
+
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50:  '#f0f4ff',
+                            100: '#dbe4ff',
+                            200: '#bac8ff',
+                            300: '#91a7ff',
+                            400: '#748ffc',
+                            500: '#5c7cfa',
+                            600: '#4c6ef5',
+                            700: '#4263eb',
+                            800: '#3b5bdb',
+                            900: '#364fc7',
+                        },
+                        need:   { light: '#fee2e2', DEFAULT: '#ef4444', dark: '#991b1b' },
+                        want:   { light: '#fef3c7', DEFAULT: '#f59e0b', dark: '#92400e' },
+                        saving: { light: '#d1fae5', DEFAULT: '#10b981', dark: '#065f46' },
+                        surface: {
+                            50:  '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Chart.js v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-surface-50 text-slate-800 dark:bg-surface-950 dark:text-slate-200 font-sans transition-colors duration-300">
+
+    {% if show_nav %}
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        {% include "partials/nav.html" %}
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto" id="main-content">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    {% else %}
+    <!-- Full-width layout (onboarding) -->
+    <main class="min-h-full">
+        {% block content %}{% endblock %}
+    </main>
+    {% endif %}
+
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        // Check for saved dark mode preference or system preference
+        if (localStorage.getItem('darkMode') === 'true' ||
+            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+    </script>
+
+    <!-- Lucide icons init -->
+    <script>lucide.createIcons();</script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

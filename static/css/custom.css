@@ -1,0 +1,300 @@
+/* ============================================================
+   REx.sane — Custom Styles
+   Minimal overrides on top of Tailwind CSS
+   ============================================================ */
+
+/* ---------- Nav Links ---------- */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: #f1f5f9;
+    color: #334155;
+}
+
+.dark .nav-link:hover {
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
+
+.nav-link-active {
+    background-color: #eff3ff;
+    color: #4263eb;
+    font-weight: 600;
+}
+
+.dark .nav-link-active {
+    background-color: #1e293b;
+    color: #748ffc;
+}
+
+/* ---------- Form Inputs ---------- */
+.form-input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid #e2e8f0;
+    background-color: #fff;
+    font-size: 0.875rem;
+    color: #334155;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #748ffc;
+    box-shadow: 0 0 0 3px rgba(116, 143, 252, 0.15);
+}
+
+.dark .form-input {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark .form-input:focus {
+    border-color: #748ffc;
+    box-shadow: 0 0 0 3px rgba(116, 143, 252, 0.2);
+}
+
+/* ---------- Cards ---------- */
+.card {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dark .card {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+.dark .card:hover {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Budget Progress Bar ---------- */
+.progress-bar-track {
+    width: 100%;
+    height: 0.5rem;
+    border-radius: 1rem;
+    background-color: #e2e8f0;
+    overflow: hidden;
+}
+
+.dark .progress-bar-track {
+    background-color: #334155;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 1rem;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Category Badges ---------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.badge-need {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-want {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-saving {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.dark .badge-need {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+.dark .badge-want {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+}
+
+.dark .badge-saving {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+
+/* ---------- Button Styles ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #5c7cfa, #4263eb);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(66, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #748ffc, #5c7cfa);
+    box-shadow: 0 4px 16px rgba(66, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-danger {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.btn-danger:hover {
+    background-color: #fecaca;
+}
+
+.dark .btn-danger {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: #64748b;
+}
+
+.btn-ghost:hover {
+    background-color: #f1f5f9;
+    color: #334155;
+}
+
+.dark .btn-ghost:hover {
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
+
+/* ---------- Smooth Scrollbar ---------- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: #475569;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+
+@keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ---------- Onboarding Slider ---------- */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    outline: none;
+    transition: background 0.2s;
+}
+
+.dark input[type="range"] {
+    background: #334155;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5c7cfa, #4263eb);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(66, 99, 235, 0.3);
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(66, 99, 235, 0.5);
+}
+
+/* ---------- Scratchpad Textarea ---------- */
+.scratchpad-textarea {
+    resize: vertical;
+    min-height: 400px;
+    font-family: 'Inter', monospace;
+    line-height: 1.8;
+}
